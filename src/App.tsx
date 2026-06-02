@@ -1,10 +1,12 @@
 import { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { settings } from "./defaults/settings";
 
-import GamePage from "./Page/GamePage";
-import RecordsPage from "./Page/RecordsPage";
-import SettingsPage from "./Page/SettingsPage";
-import StartPage from "./Page/StartPage";
+import GamePage from "./pages/GamePage";
+import RecordsPage from "./pages/RecordsPage";
+import SettingsPage from "./pages/SettingsPage";
+import StartPage from "./pages/StartPage";
+import { paths } from "./defaults/constants";
 
 const App = () => {
 
@@ -15,7 +17,15 @@ const App = () => {
   }, [])
 
   return (
-    <SettingsPage />
+    <BrowserRouter>
+      <Routes>
+        <Route path={paths.INDEX} element={<StartPage />} />
+        <Route path={paths.GAME} element={<GamePage />} />
+        <Route path={paths.RECORDS} element={<RecordsPage />} />
+        <Route path={paths.SETTINGS} element={<SettingsPage />} />
+        <Route path="*" element={"404, Page not found"} />
+      </Routes>
+    </BrowserRouter>
   )
 };
 

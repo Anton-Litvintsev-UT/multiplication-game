@@ -1,7 +1,12 @@
 import { Button, Progress } from 'antd';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { paths } from '../defaults/constants';
+import FooterNavigation from '../components/FooterNavigation';
 
 export default function GamePage() {
+    const navigate = useNavigate();
+
     const answers = [44, 55, 66, 77]
     const [playerAnswer, setPlayerAnswer] = useState<number | undefined>();
     const [progressPercent, setProgressPercent] = useState<number | undefined>(100);
@@ -27,7 +32,7 @@ export default function GamePage() {
     return (
         <div className="flex flex-col items-center p-8 gap-6">
             <div className="flex flex-col items-center p-8 gap-6 bg-gray-400 w-min">
-                <Button className="text-center">
+                <Button className="text-center" onClick={() => navigate(paths.INDEX)}>
                     Закончить игру
                 </Button>
                 <Progress
@@ -62,6 +67,7 @@ export default function GamePage() {
                     ))}
                 </div>
             </div>
+            <FooterNavigation />
         </div>
     )
 }

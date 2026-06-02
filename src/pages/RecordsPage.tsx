@@ -1,4 +1,5 @@
 import { Table } from "antd";
+import FooterNavigation from "../components/FooterNavigation";
 
 // dummy values for testing
 const dataSource = [
@@ -131,6 +132,7 @@ export default function RecordsPage() {
   return (
     <div className="flex flex-col items-center p-8 gap-6">
       <Table dataSource={dataSource} columns={columns} />
+      <FooterNavigation />
     </div>
   )
 }
