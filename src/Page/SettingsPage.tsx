@@ -73,6 +73,22 @@ export default function SettingsPage() {
     const [currentLang, setCurrentLang] = useState('ru');
     const [currentTheme, setCurrentTheme] = useState('light');
 
+    const onDifficultyChange = (val: number | null) => {
+        setDifficultyLvl(val)
+        localStorage.setItem("lvl", JSON.stringify(val))
+        console.log(localStorage)
+    }
+
+    const onLangChange = (val: string) => {
+        setCurrentLang(val)
+        localStorage.setItem("lang", val)
+    }
+
+    const onThemeChange = (val: string) => {
+        setCurrentTheme(val)
+        localStorage.setItem("theme", val)
+    }
+
     const currentLangLabel = getItemLabel(languages, currentLang);
     const currentThemeLabel = getItemLabel(themes, currentTheme);
     return (
@@ -88,8 +104,8 @@ export default function SettingsPage() {
                     min={2}
                     max={20}
                     defaultValue={defaultDifficulty}
-                    onChange={(val) => setDifficultyLvl(val as number | null)}
-                    onBlur={() => difficultyLvl === null && setDifficultyLvl(defaultDifficulty)}
+                    onChange={(val) => onDifficultyChange(val as number | null)}
+                    onBlur={() => difficultyLvl === null && onDifficultyChange(defaultDifficulty)}
                     placeholder="-"
                 />
                 <DropdownWithLabel
@@ -97,7 +113,7 @@ export default function SettingsPage() {
                     selected={currentLangLabel as string}
                     menuProps={{
                         items: languages,
-                        onClick: (e) => setCurrentLang(e.key)
+                        onClick: (e) => onLangChange(e.key)
                     }}
                 />
                 <DropdownWithLabel
@@ -105,7 +121,7 @@ export default function SettingsPage() {
                     selected={currentThemeLabel as string}
                     menuProps={{
                         items: themes,
-                        onClick: (e) => setCurrentTheme(e.key)
+                        onClick: (e) => onThemeChange(e.key)
                     }}
                 />
             </div>
