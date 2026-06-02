@@ -3,7 +3,7 @@ import { Button } from "antd";
 
 export default function StartPage() {
     return (
-        <div className="min-h-screen bg-sky-50 flex flex-col items-center p-8 gap-6">
+        <div className="flex flex-col items-center p-8 gap-6">
             <div className="text-center">
                 <h1 className="text-3xl font-bold text-sky-900">Multiplication Game</h1>
             </div>
