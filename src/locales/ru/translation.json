@@ -1,0 +1,30 @@
+{
+  "general.game_name": "Игра на умножение",
+  "general.play": "Играть",
+  "general.home": "Главная",
+  "general.settings": "Настройки",
+  "general.records": "Рекорды",
+
+  "gamepage.end_game": "Остановить игру",
+  "gamepage.next_task": "Следующее задание",
+  "gamepage.score": "Ваш результат",
+  "gamepage.save_result": "Сохранить результат",
+
+  "records.rank": "Место",
+  "records.name": "Имя",
+  "records.difficulty": "Сложность",
+  "records.correct": "Верно",
+  "records.incorrect": "Неверно",
+  "records.points": "Очки",
+
+  "settings.difficulty": "Сложность:",
+  "settings.language": "Язык:",
+  "settings.theme": "Тема",
+
+  "languagesDropdown.en": "English",
+  "languagesDropdown.ru": "Русский",
+  "languagesDropdown.ee": "Eesti",
+
+  "themesDropdown.light": "Светлая",
+  "themesDropdown.dark": "Тёмная"
+}

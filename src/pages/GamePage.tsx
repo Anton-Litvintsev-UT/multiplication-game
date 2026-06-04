@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '../defaults/constants';
 import FooterNavigation from '../components/FooterNavigation';
+import { useTranslation } from 'react-i18next';
 
 export default function GamePage() {
+    const { t } = useTranslation()
     const navigate = useNavigate();
 
     const answers = [44, 55, 66, 77]
@@ -33,7 +35,7 @@ export default function GamePage() {
         <div className="flex flex-col items-center p-8 gap-6">
             <div className="flex flex-col items-center p-8 gap-6 bg-gray-400 w-min">
                 <Button className="text-center" onClick={() => navigate(paths.INDEX)}>
-                    Закончить игру
+                    {t("gamepage.end_game")}
                 </Button>
                 <Progress
                     className="justify-center"
@@ -46,11 +48,11 @@ export default function GamePage() {
                 />
                 <div className="flex w-full flex-row justify-between">
                     <div>
-                        <h3>Ваша задача</h3>
+                        <h3>{t("gamepage.score")}</h3>
                         <h1>2x2</h1>
                     </div>
                     <div>
-                        <h3>Ваши баллы</h3>
+                        <h3>{t("gamepage.save_result")}</h3>
                         <h1>100</h1>
                     </div>
                 </div>

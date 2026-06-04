@@ -7,27 +7,65 @@ export const paths = {
   SETTINGS: "/settings",
 };
 
-export const languages: MenuProps['items'] = [
-    {
-        key: 'en',
-        label: 'English',
-    },
-    {
-        key: 'ru',
-        label: 'Русский',
-    },
-    {
-        key: 'ee',
-        label: 'Eesti',
-    }]
+export const languagesDropdown: MenuProps["items"] = [
+  {
+    key: "en",
+    label: "languagesDropdown.en",
+  },
+  {
+    key: "ru",
+    label: "languagesDropdown.ru",
+  },
+  {
+    key: "ee",
+    label: "languagesDropdown.ee",
+  },
+];
 
-export const themes: MenuProps['items'] = [
-    {
-        key: 'light',
-        label: 'Светлая',
-    },
-    {
-        key: 'dark',
-        label: 'Тёмная',
-    },
-]
+export const themesDropdown: MenuProps["items"] = [
+  {
+    key: "light",
+    label: "themesDropdown.light",
+  },
+  {
+    key: "dark",
+    label: "themesDropdown.dark",
+  },
+];
+
+export const recordsTableColumns: {
+  title: string;
+  dataIndex: string;
+  key: string;
+}[] = [
+  {
+    title: "records.rank",
+    dataIndex: "rank",
+    key: "rank",
+  },
+  {
+    title: "records.name",
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: "records.difficulty",
+    dataIndex: "difficulty",
+    key: "difficulty",
+  },
+  {
+    title: "records.correct",
+    dataIndex: "correct",
+    key: "correct",
+  },
+  {
+    title: "records.incorrect",
+    dataIndex: "incorect",
+    key: "incorect",
+  },
+  {
+    title: "records.points",
+    dataIndex: "points",
+    key: "points",
+  },
+];

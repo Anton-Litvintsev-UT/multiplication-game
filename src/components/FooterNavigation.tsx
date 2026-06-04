@@ -3,21 +3,23 @@ import { Menu } from 'antd';
 import { Home, Gamepad2, Settings } from 'lucide-react';
 import { paths } from "../defaults/constants";
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface';
+import { useTranslation } from 'react-i18next';
 
 export default function FooterNavigation() {
     const navigate = useNavigate();
+    const { t } = useTranslation()
     const { pathname } = useLocation();
 
     console.log(pathname, `/${paths.GAME}`)
 
     const items: ItemType<MenuItemType>[] = [
-        { key: paths.INDEX, label: 'В начало', icon: <Home size={18} /> },
+        { key: paths.INDEX, label: t("general.home"), icon: <Home size={18} /> },
 
         ...(pathname !== paths.GAME
-            ? [{ key: paths.GAME, label: 'В игру', icon: <Gamepad2 size={18} /> }]
+            ? [{ key: paths.GAME, label: t("general.play"), icon: <Gamepad2 size={18} /> }]
             : []),
         ...(pathname !== paths.SETTINGS
-            ? [{ key: paths.SETTINGS, label: 'Настройки', icon: <Settings size={18} /> }]
+            ? [{ key: paths.SETTINGS, label: t("general.settings"), icon: <Settings size={18} /> }]
             : []),
     ];
 

@@ -7,6 +7,7 @@ import RecordsPage from "./pages/RecordsPage";
 import SettingsPage from "./pages/SettingsPage";
 import StartPage from "./pages/StartPage";
 import { paths } from "./defaults/constants";
+import "./i18n";
 
 const App = () => {
 

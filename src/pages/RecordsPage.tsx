@@ -1,5 +1,7 @@
 import { Table } from "antd";
 import FooterNavigation from "../components/FooterNavigation";
+import { useTranslation } from "react-i18next";
+import { recordsTableColumns } from "../defaults/constants";
 
 // dummy values for testing
 const dataSource = [
@@ -95,43 +97,13 @@ const dataSource = [
   }
 ];
 
-const columns = [
-  {
-    title: 'Rank',
-    dataIndex: 'rank',
-    key: 'rank',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Difficulty',
-    dataIndex: 'difficulty',
-    key: 'difficulty',
-  },
-  {
-    title: 'Correct',
-    dataIndex: 'correct',
-    key: 'correct',
-  },
-  {
-    title: 'Incorect',
-    dataIndex: 'incorect',
-    key: 'incorect',
-  },
-  {
-    title: 'Points',
-    dataIndex: 'points',
-    key: 'points',
-  },
-];
-
 export default function RecordsPage() {
+  const { t } = useTranslation()
+
+  const recordsTableColumnsTranslated = recordsTableColumns.map((item: any) => ({ ...item, title: t(item.title) }));
   return (
     <div className="flex flex-col items-center p-8 gap-6">
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={dataSource} columns={recordsTableColumnsTranslated} />
       <FooterNavigation />
     </div>
   )

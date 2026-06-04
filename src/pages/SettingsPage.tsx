@@ -4,15 +4,22 @@ import { useState } from 'react';
 import type { ItemType } from 'antd/es/menu/interface';
 import NumberInputWithLabel from '../components/NumberInputWithLabel';
 import { DropdownWithLabel } from '../components/DropdownWithLabel';
-import { languages, themes } from '../defaults/constants';
+import { languagesDropdown, themesDropdown } from '../defaults/constants';
 import FooterNavigation from '../components/FooterNavigation';
-
-const getItemLabel = (items: ItemType[] | undefined, key: string) => {
-    const selectedItem = items?.find((item: any) => item?.key === key) as any;
-    return selectedItem?.label || key;
-}
+import { useTranslation } from 'react-i18next';
 
 export default function SettingsPage() {
+    const { i18n, t } = useTranslation()
+
+    const dropdownKeyTranslator = (items: ItemType[] | undefined): ItemType[] | undefined => {
+        return items?.map((item: any) => ({ ...item, label: t(item.label) }));
+    };
+
+    const getItemLabel = (items: ItemType[] | undefined, key: string) => {
+        const selectedItem = items?.find((item: any) => item?.key === key) as any;
+        return selectedItem?.label || key;
+    }
+
     const defaultDifficulty = 3;
     const [difficultyLvl, setDifficultyLvl] = useState<number | null>(defaultDifficulty);
     const [currentLang, setCurrentLang] = useState('ru');
@@ -25,7 +32,7 @@ export default function SettingsPage() {
 
     const onLangChange = (val: string) => {
         setCurrentLang(val)
-        localStorage.setItem("lang", val)
+        i18n.changeLanguage(val)
     }
 
     const onThemeChange = (val: string) => {
@@ -33,17 +40,19 @@ export default function SettingsPage() {
         localStorage.setItem("theme", val)
     }
 
-    const currentLangLabel = getItemLabel(languages, currentLang);
-    const currentThemeLabel = getItemLabel(themes, currentTheme);
+    const languagesDropdownTranslated = dropdownKeyTranslator(languagesDropdown)
+    const themesDropdownTranslated = dropdownKeyTranslator(themesDropdown)
+    const currentLangLabel = getItemLabel(languagesDropdownTranslated, currentLang);
+    const currentThemeLabel = getItemLabel(themesDropdownTranslated, currentTheme);
     return (
         <div className="flex flex-col items-center p-8 gap-6">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-sky-900">Multiplication Game</h1>
+                <h1 className="text-3xl font-bold text-sky-900">{t("general.game_name")}</h1>
             </div>
             <div className="flex flex-col gap-3 w-full max-w-xs">
                 <NumberInputWithLabel
                     mode='spinner'
-                    label="Сложность:"
+                    label={t("settings.difficulty")}
                     value={difficultyLvl}
                     min={2}
                     max={20}
@@ -53,18 +62,18 @@ export default function SettingsPage() {
                     placeholder="-"
                 />
                 <DropdownWithLabel
-                    label="Язык:"
+                    label={t("settings.language")}
                     selected={currentLangLabel as string}
                     menuProps={{
-                        items: languages,
+                        items: languagesDropdownTranslated,
                         onClick: (e) => onLangChange(e.key)
                     }}
                 />
                 <DropdownWithLabel
-                    label="Тема:"
+                    label={t("settings.theme")}
                     selected={currentThemeLabel as string}
                     menuProps={{
-                        items: themes,
+                        items: themesDropdownTranslated,
                         onClick: (e) => onThemeChange(e.key)
                     }}
                 />
