@@ -11,10 +11,12 @@ import "./i18n";
 
 const App = () => {
 
-  useEffect(() => { // put default settings inside localStorage
-    Object.entries(settings).forEach(([key, value]) => {
-      localStorage.setItem(key, JSON.stringify(value));
-    });
+  useEffect(() => { // put default settings inside localStorage for first session
+    if (!localStorage) { // avoid overwriting user preferences on page reload
+      Object.entries(settings).forEach(([key, value]) => {
+        localStorage.setItem(key, value);
+      });
+    }
   }, [])
 
   return (
