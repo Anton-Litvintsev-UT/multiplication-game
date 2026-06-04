@@ -1,30 +1,30 @@
 {
-  "general.game_name": "Multiplication Game",
-  "general.play": "Play",
-  "general.home": "Home",
-  "general.settings": "Settings",
-  "general.records": "Records",
+	"general.game_name": "Multiplication Game",
+	"general.play": "Play",
+	"general.home": "Home",
+	"general.settings": "Settings",
+	"general.records": "Records",
 
-  "gamepage.end_game": "Stop game",
-  "gamepage.next_task": "Next task",
-  "gamepage.score": "Your score",
-  "gamepage.save_result": "Save result",
+	"gamepage.end_game": "Stop game",
+	"gamepage.next_task": "Next task",
+	"gamepage.score": "Your score",
+	"gamepage.save_result": "Save result",
 
-  "records.rank": "Rank",
-  "records.name": "Name",
-  "records.difficulty": "Difficulty",
-  "records.correct": "Correct",
-  "records.incorrect": "Incorrect",
-  "records.points": "Points",
+	"records.rank": "Rank",
+	"records.name": "Name",
+	"records.difficulty": "Difficulty",
+	"records.correct": "Correct",
+	"records.incorrect": "Incorrect",
+	"records.points": "Points",
 
-  "settings.difficulty": "Difficulty:",
-  "settings.language": "Language:",
-  "settings.theme": "Theme",
+	"settings.difficulty": "Difficulty:",
+	"settings.language": "Language:",
+	"settings.theme": "Theme",
 
-  "languagesDropdown.en": "English",
-  "languagesDropdown.ru": "Русский",
-  "languagesDropdown.ee": "Eesti",
+	"languagesDropdown.en": "English",
+	"languagesDropdown.ru": "Русский",
+	"languagesDropdown.ee": "Eesti",
 
-  "themesDropdown.light": "Light",
-  "themesDropdown.dark": "Dark"
+	"themesDropdown.light": "Light",
+	"themesDropdown.dark": "Dark"
 }
