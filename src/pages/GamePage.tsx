@@ -1,4 +1,4 @@
-import { Button, Progress } from 'antd';
+import { Button, Progress, ConfigProvider, theme as antTheme } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '../defaults/constants';
@@ -12,6 +12,13 @@ export default function GamePage() {
     const answers = [44, 55, 66, 77]
     const [playerAnswer, setPlayerAnswer] = useState<number | undefined>();
     const [progressPercent, setProgressPercent] = useState<number | undefined>(100);
+    const [currentTheme] = useState(() => localStorage.getItem("theme") || 'light');
+
+    useEffect(() => {
+        const isDark = currentTheme === 'dark';
+        document.documentElement.classList.toggle('dark', isDark);
+        document.documentElement.style.colorScheme = currentTheme;
+    }, [currentTheme]);
 
     // Game loop
     useEffect(() => {
@@ -32,44 +39,46 @@ export default function GamePage() {
     }, []);
 
     return (
-        <div className="flex flex-col items-center p-8 gap-6">
-            <div className="flex flex-col items-center p-8 gap-6 bg-gray-400 w-min">
-                <Button className="text-center" onClick={() => navigate(paths.INDEX)}>
-                    {t("gamepage.end_game")}
-                </Button>
-                <Progress
-                    className="justify-center"
-                    percent={progressPercent}
-                    size={[400, 20]}
-                    showInfo={false}
-                    success={{
-                        percent: 0
-                    }}
-                />
-                <div className="flex w-full flex-row justify-between">
-                    <div>
-                        <h3>{t("gamepage.score")}</h3>
-                        <h1>2x2</h1>
+        <ConfigProvider theme={{ algorithm: currentTheme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm }}>
+            <div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
+                <div className="flex flex-col items-center p-8 gap-6 bg-gray-400 dark:bg-slate-700 w-min rounded-lg shadow-xl">
+                    <Button className="text-center" onClick={() => navigate(paths.INDEX)}>
+                        {t("gamepage.end_game")}
+                    </Button>
+                    <Progress
+                        className="justify-center"
+                        percent={progressPercent}
+                        size={[400, 20]}
+                        showInfo={false}
+                        success={{
+                            percent: 0
+                        }}
+                    />
+                    <div className="flex w-full flex-row justify-between">
+                        <div>
+                            <h3 className="dark:text-gray-300">{t("gamepage.score")}</h3>
+                            <h1 className="dark:text-white">2x2</h1>
+                        </div>
+                        <div>
+                            <h3 className="dark:text-gray-300">{t("gamepage.save_result")}</h3>
+                            <h1 className="dark:text-white">100</h1>
+                        </div>
                     </div>
-                    <div>
-                        <h3>{t("gamepage.save_result")}</h3>
-                        <h1>100</h1>
+                    <div className="grid grid-cols-2 gap-4 w-full">
+                        {answers.map((answer, index) => (
+                            <Button
+                                key={index}
+                                className="w-full"
+                                style={{ height: 'auto', aspectRatio: '1 / 1', fontSize: '4rem' }}
+                                onClick={() => setPlayerAnswer(answer)}
+                            >
+                                {answer}
+                            </Button>
+                        ))}
                     </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 w-full">
-                    {answers.map((answer, index) => (
-                        <Button
-                            key={index}
-                            className="w-full"
-                            style={{ height: 'auto', aspectRatio: '1 / 1', fontSize: '4rem' }}
-                            onClick={() => setPlayerAnswer(answer)}
-                        >
-                            {answer}
-                        </Button>
-                    ))}
-                </div>
+                <FooterNavigation />
             </div>
-            <FooterNavigation />
-        </div>
+        </ConfigProvider>
     )
 }

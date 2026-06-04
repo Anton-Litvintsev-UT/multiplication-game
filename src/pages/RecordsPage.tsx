@@ -1,4 +1,5 @@
-import { Table } from "antd";
+import { Table, ConfigProvider, theme as antTheme } from "antd";
+import { useEffect, useState } from "react";
 import FooterNavigation from "../components/FooterNavigation";
 import { useTranslation } from "react-i18next";
 import { recordsTableColumns } from "../defaults/constants";
@@ -99,12 +100,20 @@ const dataSource = [
 
 export default function RecordsPage() {
   const { t } = useTranslation()
+  const [currentTheme] = useState(() => localStorage.getItem("theme") || 'light');
+
+  useEffect(() => {
+      document.documentElement.classList.toggle('dark', currentTheme === 'dark');
+      document.documentElement.style.colorScheme = currentTheme;
+  }, [currentTheme]);
 
   const recordsTableColumnsTranslated = recordsTableColumns.map((item: any) => ({ ...item, title: t(item.title) }));
   return (
-    <div className="flex flex-col items-center p-8 gap-6">
-      <Table dataSource={dataSource} columns={recordsTableColumnsTranslated} />
-      <FooterNavigation />
-    </div>
+    <ConfigProvider theme={{ algorithm: currentTheme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm }}>
+      <div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
+        <Table dataSource={dataSource} columns={recordsTableColumnsTranslated} />
+        <FooterNavigation />
+      </div>
+    </ConfigProvider>
   )
 }
