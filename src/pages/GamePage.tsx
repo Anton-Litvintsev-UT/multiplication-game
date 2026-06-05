@@ -92,25 +92,25 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 	// Progress bar
 	useEffect(() => {
 		// Start timer
-		const startTime = Date.now();
-		const totalTime = 6 * 1000;
-		const fps = 8;
-		const tickInterval = 1000 / fps;
+		const gameStartTime = Date.now();
+		const gameTotalTime = Number(localStorage.getItem("game_duration"));
+		const progressBarFPS = 8;
+		const progressBarUpdateInterval = 1000 / progressBarFPS;
 
-		const interval = setInterval(() => {
-			const elapsedTime = Date.now() - startTime;
-			setProgressPercent(100 - (elapsedTime / totalTime) * 100); // show progress in reverse
-			if (elapsedTime >= totalTime) {
+		const intervalObject = setInterval(() => {
+			const elapsedTime = Date.now() - gameStartTime;
+			setProgressPercent(100 - (elapsedTime / gameTotalTime) * 100); // show progress in reverse
+			if (elapsedTime >= gameTotalTime) {
 				// stop progress bar
-				clearInterval(interval);
+				clearInterval(intervalObject);
 
 				// use hook useRef to update values for game results
 				const { gameScore, correctCount, askedCount } = gameStateRef.current;
 				setGameStats({ gameScore, correctCount, askedCount });
 				navigate(paths.RESULT);
 			}
-		}, tickInterval);
-		return () => clearInterval(interval); // if component is destroyed before game ends
+		}, progressBarUpdateInterval);
+		return () => clearInterval(intervalObject); // if component is destroyed before game ends
 	}, []);
 
 	useEffect(() => {
