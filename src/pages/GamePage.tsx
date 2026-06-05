@@ -1,7 +1,7 @@
 import { Button, Progress, ConfigProvider, theme as antTheme } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { paths } from "../defaults/constants";
+import { paths, type GameStats } from "../defaults/constants";
 import FooterNavigation from "../components/FooterNavigation";
 import { useTranslation } from "react-i18next";
 
@@ -25,12 +25,35 @@ const generateRandomNaturalNumber = ({ min = 2, max }: Range): number => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const generateAnswerArray = (factor1: number, factor2: number): number[] => {
-	const correctAnswer = factor1 * factor2;
-	return [correctAnswer, 55, 66, 77];
+// TODO: improve generation, make answers more similar to real one: factor1 + 1 or 2 * factor2, factor2 + 1 or 2 * factor1
+const generateAnswersArray = (correctAnswer: number): number[] => {
+	const answers = new Set<number>();
+
+	// 1. Always add the correct answer
+	answers.add(correctAnswer);
+
+	// 2. Generate distractors until we have 4 total
+	while (answers.size < 4) {
+		// Create an offset between -10 and 10 (excluding 0)
+		const offset = Math.floor(Math.random() * 21) - 10;
+		const distractor = correctAnswer + offset;
+
+		// Ensure distractor is a natural number and not the correct answer
+		if (distractor > 0 && distractor !== correctAnswer) {
+			answers.add(distractor);
+		}
+	}
+
+	// 3. Convert to array and shuffle them
+	// return Array.from(answers).sort(() => Math.random() - 0.5);
+	return Array.from(answers);
 };
 
-export default function GamePage() {
+interface GamePageProps {
+	setGameStats: (stats: GameStats) => void;
+}
+
+export default function GamePage({ setGameStats }: GamePageProps) {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
@@ -43,9 +66,13 @@ export default function GamePage() {
 	const [showAnswer, setShowAnswer] = useState(false);
 	const [selectedAnswer, setSelectedAnswer] = useState<number>(0);
 	const [correctAnswer, setCorrectAnswer] = useState<number>(0);
+	const [answersArray, setAnswersArray] = useState<number[]>([]);
+	const [gameScore, setGameScore] = useState(0);
+	const [askedCount, setAskedCount] = useState(0);
+	const [correctCount, setCorrectCount] = useState(0);
 
-	const answers = generateAnswerArray(factor1, factor2);
 	const [progressPercent, setProgressPercent] = useState<number>(100);
+	const gameStateRef = useRef({ gameScore, correctCount, askedCount });
 
 	const currentTheme = localStorage.getItem("theme")!; // always on first start light theme is added to local storage
 
@@ -57,41 +84,16 @@ export default function GamePage() {
 		}
 	};
 
-	useEffect(() => {
-		const isDark = currentTheme === "dark";
-		document.documentElement.classList.toggle("dark", isDark);
-		document.documentElement.style.colorScheme = currentTheme;
-	}, []);
-
-	useEffect(() => {
-		setCorrectAnswer(factor1 * factor2);
-	}, [factor1, factor2]);
-
-	useEffect(() => {
-		if (!showAnswer) return;
-
-		// TODO: If answer is correct have smaller delay, otherwise delay should be penalty
-		const timer = setTimeout(() => {
-			setShowAnswer(false);
-			console.log("time to add points");
-			console.log("hide answers");
-		}, 1000);
-
-		return () => clearTimeout(timer);
-	}, [showAnswer]);
-
-	useEffect(() => {
-		if (isEffectRan.current) return; // avoid multiple number generations in dev mode
-		isEffectRan.current = true;
+	const updateTask = () => {
 		setFactor1(generateRandomNaturalNumber({ max: difficultyLvl }));
 		setFactor2(generateRandomNaturalNumber({ max: difficultyLvl }));
-	}, []);
+	};
 
-	// Game loop
+	// Progress bar
 	useEffect(() => {
 		// Start timer
 		const startTime = Date.now();
-		const totalTime = 60 * 1000;
+		const totalTime = 6 * 1000;
 		const fps = 8;
 		const tickInterval = 1000 / fps;
 
@@ -101,10 +103,61 @@ export default function GamePage() {
 			if (elapsedTime >= totalTime) {
 				// stop progress bar
 				clearInterval(interval);
+
+				// use hook useRef to update values for game results
+				const { gameScore, correctCount, askedCount } = gameStateRef.current;
+				setGameStats({ gameScore, correctCount, askedCount });
+				navigate(paths.RESULT);
 			}
 		}, tickInterval);
 		return () => clearInterval(interval); // if component is destroyed before game ends
 	}, []);
+
+	useEffect(() => {
+		const isDark = currentTheme === "dark";
+		document.documentElement.classList.toggle("dark", isDark);
+		document.documentElement.style.colorScheme = currentTheme;
+	}, []);
+
+	useEffect(() => {
+		if (isEffectRan.current) return; // avoid multiple number generations in dev mode
+		isEffectRan.current = true;
+		updateTask();
+	}, []);
+
+	// Keep the ref updated whenever the state changes
+	useEffect(() => {
+		gameStateRef.current = { gameScore, correctCount, askedCount };
+	}, [gameScore, correctCount, askedCount]);
+
+	useEffect(() => {
+		const answer = factor1 * factor2;
+		setCorrectAnswer(answer);
+		setAnswersArray(generateAnswersArray(answer));
+	}, [factor1, factor2]);
+
+	useEffect(() => {
+		if (!showAnswer) return;
+
+		setAskedCount(askedCount + 1);
+
+		let delay;
+		if (selectedAnswer == correctAnswer) {
+			delay = 0;
+			setGameScore(gameScore + difficultyLvl);
+			setCorrectCount(askedCount + 1);
+		} else {
+			// add delay penalty if answer was wrong
+			delay = 3 * 1000;
+		}
+
+		const timer = setTimeout(() => {
+			setShowAnswer(false);
+			updateTask();
+		}, delay);
+
+		return () => clearTimeout(timer);
+	}, [showAnswer]);
 
 	return (
 		<ConfigProvider
@@ -131,20 +184,18 @@ export default function GamePage() {
 					/>
 					<div className="flex w-full flex-row justify-between">
 						<div>
-							<h3 className="dark:text-gray-300">{t("gamepage.score")}</h3>
+							<h3 className="dark:text-gray-300">{t("gamepage.next_task")}</h3>
 							<h1 className="dark:text-white">
 								{factor1}x{factor2}
 							</h1>
 						</div>
 						<div>
-							<h3 className="dark:text-gray-300">
-								{t("gamepage.save_result")}
-							</h3>
-							<h1 className="dark:text-white">100</h1>
+							<h3 className="dark:text-gray-300">{t("gamepage.score")}</h3>
+							<h1 className="dark:text-white">{gameScore}</h1>
 						</div>
 					</div>
 					<div className="grid grid-cols-2 gap-4 w-full">
-						{answers.map((answer, index) => (
+						{answersArray.map((answer, index) => (
 							<Button
 								key={`${index} ${getBackgroundColor(showAnswer, answer, correctAnswer, selectedAnswer)}`}
 								className="w-full"

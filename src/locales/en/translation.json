@@ -17,6 +17,13 @@
 	"records.incorrect": "Incorrect",
 	"records.points": "Points",
 
+	"result.start_game": "Start game",
+	"result.answer_accuracy": "Your answers",
+	"result.score": "Your score",
+	"result.save_score": "Save score",
+	"result.player_name": "Write your name",
+	"result.navigate_to_records": "Records",
+
 	"settings.difficulty": "Difficulty:",
 	"settings.language": "Language:",
 	"settings.theme": "Theme",

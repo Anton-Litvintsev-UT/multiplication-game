@@ -1,0 +1,97 @@
+import { useEffect, useState } from "react";
+import { paths, type GameStats } from "../defaults/constants";
+import { useNavigate } from "react-router-dom";
+import { Button, ConfigProvider, theme as antTheme, Input } from "antd";
+import FooterNavigation from "../components/FooterNavigation";
+import { useTranslation } from "react-i18next";
+
+interface Props {
+	gameStats: GameStats | undefined;
+}
+
+export default function ResultPage({ gameStats }: Props) {
+	const { t } = useTranslation();
+	const navigate = useNavigate();
+	const [showResultBtn, setShowResultBtn] = useState(false);
+	const currentTheme = localStorage.getItem("theme")!; // always on first start light theme is added to local storage
+
+	useEffect(() => {
+		if (typeof gameStats == "undefined") {
+			navigate(paths.INDEX);
+		}
+	}, []);
+
+	const onResultSave = () => {
+		console.log("TODO: POST request to save data to db");
+		setShowResultBtn(true);
+	};
+
+	if (typeof gameStats == "undefined") return;
+
+	return (
+		<ConfigProvider
+			theme={{
+				algorithm:
+					currentTheme === "dark"
+						? antTheme.darkAlgorithm
+						: antTheme.defaultAlgorithm,
+			}}
+		>
+			<div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
+				<div className="flex flex-col items-center p-8 gap-6 bg-gray-400 dark:bg-slate-700 min-w-100 rounded-lg shadow-xl">
+					<Button
+						size="large"
+						className="text-center w-full"
+						onClick={() => navigate(paths.GAME)}
+					>
+						{t("result.start_game")}
+					</Button>
+					<div className="flex w-full flex-row justify-between gap-4">
+						<div>
+							<h3 className="text-slate-800 dark:text-gray-300">
+								{t("result.answer_accuracy")}
+							</h3>
+							<h1 className="text-slate-900 dark:text-white">
+								{gameStats.correctCount} / {gameStats.askedCount}
+							</h1>
+						</div>
+						<div>
+							<h3 className="text-slate-800 dark:text-gray-300">
+								{t("gamepage.score")}
+							</h3>
+							<h1 className="text-slate-900 dark:text-white">
+								{gameStats.gameScore}
+							</h1>
+						</div>
+					</div>
+
+					{showResultBtn ? (
+						<Button
+							type="primary"
+							size="large"
+							className="text-center w-full font-bold"
+							onClick={() => navigate(paths.RECORDS)}
+						>
+							{t("result.navigate_to_records")}
+						</Button>
+					) : (
+						<>
+							<div className="flex flex-col gap-2 w-full">
+								<Input size="large" placeholder={t("result.player_name")} />
+							</div>
+							<Button
+								type="primary"
+								size="large"
+								className="text-center w-full font-bold"
+								onClick={() => onResultSave()}
+							>
+								{t("result.save_score")}
+							</Button>
+						</>
+					)}
+				</div>
+				<FooterNavigation />
+			</div>
+		</ConfigProvider>
+	);
+}

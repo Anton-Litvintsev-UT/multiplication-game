@@ -17,6 +17,13 @@
 	"records.incorrect": "Неверно",
 	"records.points": "Очки",
 
+	"result.start_game": "Начать игру",
+	"result.answer_accuracy": "Ваши ответы",
+	"result.score": "Ваши баллы",
+	"result.save_score": "Сохранить результат",
+	"result.player_name": "Напишите своё имя",
+	"result.navigate_to_records": "Рекорды",
+
 	"settings.difficulty": "Сложность:",
 	"settings.language": "Язык:",
 	"settings.theme": "Тема",

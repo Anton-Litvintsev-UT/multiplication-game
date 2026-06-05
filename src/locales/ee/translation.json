@@ -17,6 +17,13 @@
 	"records.incorrect": "Valesid",
 	"records.points": "Punktid",
 
+	"result.start_game": "Alusta mängu",
+	"result.answer_accuracy": "Sinu vastused",
+	"result.score": "Sinu punktid",
+	"result.save_score": "Salvesta tulemus",
+	"result.player_name": "Sisestage siia oma nimi",
+	"result.navigate_to_records": "Tulemused",
+
 	"settings.difficulty": "Raskusaste:",
 	"settings.language": "Keel:",
 	"settings.theme": "Teema",

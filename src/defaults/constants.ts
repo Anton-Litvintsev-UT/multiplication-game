@@ -1,9 +1,16 @@
 import type { MenuProps } from "antd";
 
+export interface GameStats {
+	gameScore: number;
+	correctCount: number;
+	askedCount: number;
+}
+
 export const paths = {
 	INDEX: "/",
 	GAME: "/game",
 	RECORDS: "/records",
+	RESULT: "/result",
 	SETTINGS: "/settings",
 };
 
