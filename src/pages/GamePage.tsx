@@ -5,6 +5,10 @@ import { paths, type GameStats } from "../defaults/constants";
 import FooterNavigation from "../components/FooterNavigation";
 import { useTranslation } from "react-i18next";
 
+type GamePageProps = {
+	setGameStats: (stats: GameStats) => void;
+};
+
 type Range = {
 	min?: number;
 	max: number;
@@ -49,10 +53,6 @@ const generateAnswersArray = (correctAnswer: number): number[] => {
 	return Array.from(answers);
 };
 
-interface GamePageProps {
-	setGameStats: (stats: GameStats) => void;
-}
-
 export default function GamePage({ setGameStats }: GamePageProps) {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
@@ -64,6 +64,8 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 	const [factor2, setFactor2] = useState(2);
 
 	const [showAnswer, setShowAnswer] = useState(false);
+	const [gameFinished, setGameFinished] = useState(false);
+
 	const [selectedAnswer, setSelectedAnswer] = useState<number>(0);
 	const [correctAnswer, setCorrectAnswer] = useState<number>(0);
 	const [answersArray, setAnswersArray] = useState<number[]>([]);
@@ -76,21 +78,13 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 
 	const currentTheme = localStorage.getItem("theme")!; // always on first start light theme is added to local storage
 
-	const onAnswerSelect = (answer: number) => {
-		if (!showAnswer) {
-			// do not allow to select answer when results are shown
-			setShowAnswer(true);
-			setSelectedAnswer(answer);
-		}
-	};
-
 	const updateTask = () => {
 		setFactor1(generateRandomNaturalNumber({ max: difficultyLvl }));
 		setFactor2(generateRandomNaturalNumber({ max: difficultyLvl }));
 	};
 
-	// Progress bar
-	useEffect(() => {
+	// progress bar is responsible for game end
+	const initProgressBar = () => {
 		// Start timer
 		const gameStartTime = Date.now();
 		const gameTotalTime = Number(localStorage.getItem("game_duration"));
@@ -103,27 +97,42 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 			if (elapsedTime >= gameTotalTime) {
 				// stop progress bar
 				clearInterval(intervalObject);
-
-				// use hook useRef to update values for game results
-				const { gameScore, correctCount, askedCount } = gameStateRef.current;
-				setGameStats({ gameScore, correctCount, askedCount });
-				navigate(paths.RESULT);
+				setGameFinished(true);
 			}
 		}, progressBarUpdateInterval);
 		return () => clearInterval(intervalObject); // if component is destroyed before game ends
-	}, []);
+	};
 
-	useEffect(() => {
+	const initTheme = () => {
 		const isDark = currentTheme === "dark";
 		document.documentElement.classList.toggle("dark", isDark);
 		document.documentElement.style.colorScheme = currentTheme;
-	}, []);
+	};
+
+	const onAnswerSelect = (answer: number) => {
+		// do not allow to select answer when results are shown
+		if (!showAnswer) {
+			setShowAnswer(true);
+			setSelectedAnswer(answer);
+		}
+	};
 
 	useEffect(() => {
-		if (isEffectRan.current) return; // avoid multiple number generations in dev mode
+		// avoid multiple number generations in dev mode
+		if (isEffectRan.current) return;
 		isEffectRan.current = true;
+
+		initProgressBar();
+		initTheme();
 		updateTask();
 	}, []);
+
+	// use hook useRef to update values for game results
+	useEffect(() => {
+		if (!gameFinished) return;
+		setGameStats(gameStateRef.current);
+		navigate(paths.RESULT);
+	}, [gameFinished]);
 
 	// Keep the ref updated whenever the state changes
 	useEffect(() => {
@@ -143,7 +152,7 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 
 		let delay;
 		if (selectedAnswer == correctAnswer) {
-			delay = 0;
+			delay = 0.3 * 1000;
 			setGameScore(gameScore + difficultyLvl);
 			setCorrectCount(askedCount + 1);
 		} else {
@@ -195,21 +204,29 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 						</div>
 					</div>
 					<div className="grid grid-cols-2 gap-4 w-full">
-						{answersArray.map((answer, index) => (
-							<Button
-								key={`${index} ${getBackgroundColor(showAnswer, answer, correctAnswer, selectedAnswer)}`}
-								className="w-full"
-								style={{
-									height: "auto",
-									aspectRatio: "1 / 1",
-									fontSize: "4rem",
-									backgroundColor: `${getBackgroundColor(showAnswer, answer, correctAnswer, selectedAnswer)}`,
-								}}
-								onClick={() => onAnswerSelect(answer)}
-							>
-								{answer}
-							</Button>
-						))}
+						{answersArray.map((answer, index) => {
+							const btnBackground = getBackgroundColor(
+								showAnswer,
+								answer,
+								correctAnswer,
+								selectedAnswer,
+							);
+							return (
+								<Button
+									key={`${index} ${btnBackground}`}
+									className="w-full"
+									style={{
+										height: "auto",
+										aspectRatio: "1 / 1",
+										fontSize: "4rem",
+										backgroundColor: `${btnBackground}`,
+									}}
+									onClick={() => onAnswerSelect(answer)}
+								>
+									{answer}
+								</Button>
+							);
+						})}
 					</div>
 				</div>
 				<FooterNavigation />
