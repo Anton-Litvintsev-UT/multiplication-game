@@ -12,8 +12,8 @@ import "./i18n";
 
 const App = () => {
 	useEffect(() => {
-		// put default settings inside localStorage for first session
-		if (!localStorage) {
+		// put default settings inside localStorage for first session, ignore i18n variable
+		if (localStorage.length == 1) {
 			// avoid overwriting user preferences on page reload
 			Object.entries(settings).forEach(([key, value]) => {
 				localStorage.setItem(key, value);
