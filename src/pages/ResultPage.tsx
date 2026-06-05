@@ -14,6 +14,9 @@ export default function ResultPage({ gameStats }: Props) {
 	const navigate = useNavigate();
 	const [showResultBtn, setShowResultBtn] = useState(false);
 	const currentTheme = localStorage.getItem("theme")!; // always on first start light theme is added to local storage
+	const [playerName, setPlayerName] = useState(
+		localStorage.getItem("player_name") || "",
+	);
 
 	useEffect(() => {
 		if (typeof gameStats == "undefined") {
@@ -22,6 +25,9 @@ export default function ResultPage({ gameStats }: Props) {
 	}, []);
 
 	const onResultSave = () => {
+		if (playerName?.length) {
+			localStorage.setItem("player_name", playerName);
+		}
 		console.log("TODO: POST request to save data to db");
 		setShowResultBtn(true);
 	};
@@ -77,7 +83,12 @@ export default function ResultPage({ gameStats }: Props) {
 					) : (
 						<>
 							<div className="flex flex-col gap-2 w-full">
-								<Input size="large" placeholder={t("result.player_name")} />
+								<Input
+									size="large"
+									placeholder={t("result.player_name")}
+									onChange={(e) => setPlayerName(e.target.value)}
+									value={playerName}
+								/>
 							</div>
 							<Button
 								type="primary"
