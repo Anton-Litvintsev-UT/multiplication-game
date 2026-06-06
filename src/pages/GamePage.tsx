@@ -29,7 +29,6 @@ const generateRandomNaturalNumber = ({ min = 2, max }: Range): number => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// TODO: improve generation, make answers more similar to real one: factor1 + 1 or 2 * factor2, factor2 + 1 or 2 * factor1
 const generateAnswersArray = (correctAnswer: number): number[] => {
 	const answers = new Set<number>();
 
@@ -49,8 +48,7 @@ const generateAnswersArray = (correctAnswer: number): number[] => {
 	}
 
 	// 3. Convert to array and shuffle them
-	// return Array.from(answers).sort(() => Math.random() - 0.5);
-	return Array.from(answers);
+	return Array.from(answers).sort(() => Math.random() - 0.5);
 };
 
 export default function GamePage({ setGameStats }: GamePageProps) {
