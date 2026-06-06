@@ -154,7 +154,7 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 		if (selectedAnswer == correctAnswer) {
 			delay = 0.3 * 1000;
 			setGameScore(gameScore + difficultyLvl);
-			setCorrectCount(askedCount + 1);
+			setCorrectCount(correctCount + 1);
 		} else {
 			// add delay penalty if answer was wrong
 			delay = 3 * 1000;
