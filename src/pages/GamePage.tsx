@@ -93,11 +93,10 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 
 		const intervalObject = setInterval(() => {
 			const elapsedTime = Date.now() - gameStartTime;
-			setProgressPercent(100 - (elapsedTime / gameTotalTime) * 100); // show progress in reverse
+			setProgressPercent(Math.max(0, 100 - (elapsedTime / gameTotalTime) * 100)); // show progress in reverse
 			if (elapsedTime >= gameTotalTime) {
 				// stop progress bar
 				clearInterval(intervalObject);
-				setGameFinished(true);
 			}
 		}, progressBarUpdateInterval);
 		return () => clearInterval(intervalObject); // if component is destroyed before game ends
@@ -126,6 +125,13 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 		initTheme();
 		updateTask();
 	}, []);
+
+	// if progress bar is at 0 finish game
+	useEffect(() => {
+		if (progressPercent == 0) {
+			setGameFinished(true);
+		}
+	}, [progressPercent])
 
 	// use hook useRef to update values for game results
 	useEffect(() => {
