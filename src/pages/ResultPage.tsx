@@ -13,7 +13,8 @@ export default function ResultPage({ gameStats }: Props) {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [showResultBtn, setShowResultBtn] = useState(false);
-	const currentTheme = localStorage.getItem("theme")!; // always on first start light theme is added to local storage
+	const [isSaving, setIsSaving] = useState(false);
+	const currentTheme = localStorage.getItem("theme")!;
 	const [playerName, setPlayerName] = useState(
 		localStorage.getItem("player_name") || "",
 	);
@@ -24,15 +25,37 @@ export default function ResultPage({ gameStats }: Props) {
 		}
 	}, []);
 
-	const onResultSave = () => {
-		if (playerName?.length) {
-			localStorage.setItem("player_name", playerName);
+	const onResultSave = async () => {
+		setIsSaving(true);
+		localStorage.setItem("player_name", playerName);
+
+		try {
+			const response = await fetch("http://localhost:8000/scores", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					name: playerName,
+					gameScore: gameStats?.gameScore,
+					correctCount: gameStats?.correctCount,
+					askedCount: gameStats?.askedCount,
+				}),
+			});
+
+			if (!response.ok) {
+				throw new Error("Failed to save score");
+			}
+
+			setShowResultBtn(true);
+		} catch (error) {
+			console.error("Error saving result:", error);
+		} finally {
+			setIsSaving(false);
 		}
-		console.log("TODO: POST request to save data to db");
-		setShowResultBtn(true);
 	};
 
-	if (typeof gameStats == "undefined") return;
+	if (typeof gameStats == "undefined") return null;
 
 	return (
 		<ConfigProvider
@@ -44,7 +67,7 @@ export default function ResultPage({ gameStats }: Props) {
 			}}
 		>
 			<div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
-				<div className="flex flex-col items-center p-8 gap-6 bg-gray-400 dark:bg-slate-700 min-w-100 rounded-lg shadow-xl">
+				<div className="flex flex-col items-center p-8 gap-6 bg-gray-400 dark:bg-slate-700 min-w-[300px] rounded-lg shadow-xl">
 					<Button
 						size="large"
 						className="text-center w-full"
@@ -57,7 +80,7 @@ export default function ResultPage({ gameStats }: Props) {
 							<h3 className="text-slate-800 dark:text-gray-300">
 								{t("result.answer_accuracy")}
 							</h3>
-							<h1 className="text-slate-900 dark:text-white">
+							<h1 className="text-slate-900 dark:text-white text-2xl font-bold">
 								{gameStats.correctCount} / {gameStats.askedCount}
 							</h1>
 						</div>
@@ -65,7 +88,7 @@ export default function ResultPage({ gameStats }: Props) {
 							<h3 className="text-slate-800 dark:text-gray-300">
 								{t("gamepage.score")}
 							</h3>
-							<h1 className="text-slate-900 dark:text-white">
+							<h1 className="text-slate-900 dark:text-white text-2xl font-bold text-right">
 								{gameStats.gameScore}
 							</h1>
 						</div>
@@ -88,6 +111,7 @@ export default function ResultPage({ gameStats }: Props) {
 									placeholder={t("result.player_name")}
 									onChange={(e) => setPlayerName(e.target.value)}
 									value={playerName}
+									disabled={isSaving}
 								/>
 							</div>
 							<Button
@@ -95,6 +119,7 @@ export default function ResultPage({ gameStats }: Props) {
 								size="large"
 								className="text-center w-full font-bold"
 								onClick={() => onResultSave()}
+								loading={isSaving}
 							>
 								{t("result.save_score")}
 							</Button>
