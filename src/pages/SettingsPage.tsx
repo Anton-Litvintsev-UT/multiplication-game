@@ -23,9 +23,9 @@ export default function SettingsPage() {
 
 	const defaultDifficulty = 3;
 	const [difficultyLvl, setDifficultyLvl] = useState<number | null>(
-		defaultDifficulty,
+		Number(localStorage.getItem("lvl")) || defaultDifficulty,
 	);
-	const [currentLang, setCurrentLang] = useState(i18n.language || "ru");
+	const [currentLang, setCurrentLang] = useState(t(i18n.language));
 	const [currentTheme, setCurrentTheme] = useState(
 		() => localStorage.getItem("theme") || "light",
 	);

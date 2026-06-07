@@ -91,7 +91,9 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 
 		const intervalObject = setInterval(() => {
 			const elapsedTime = Date.now() - gameStartTime;
-			setProgressPercent(Math.max(0, 100 - (elapsedTime / gameTotalTime) * 100)); // show progress in reverse
+			setProgressPercent(
+				Math.max(0, 100 - (elapsedTime / gameTotalTime) * 100),
+			); // show progress in reverse
 			if (elapsedTime >= gameTotalTime) {
 				// stop progress bar
 				clearInterval(intervalObject);
@@ -129,7 +131,7 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 		if (progressPercent == 0) {
 			setGameFinished(true);
 		}
-	}, [progressPercent])
+	}, [progressPercent]);
 
 	// use hook useRef to update values for game results
 	useEffect(() => {

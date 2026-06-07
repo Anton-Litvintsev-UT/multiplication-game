@@ -28,6 +28,9 @@
 	"settings.language": "Keel:",
 	"settings.theme": "Teema",
 
+	"en-US": "English",
+	"ru": "Русский",
+	"ee": "Eesti",
 	"languagesDropdown.en": "English",
 	"languagesDropdown.ru": "Русский",
 	"languagesDropdown.ee": "Eesti",

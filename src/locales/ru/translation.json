@@ -28,6 +28,9 @@
 	"settings.language": "Язык:",
 	"settings.theme": "Тема",
 
+	"en-US": "English",
+	"ru": "Русский",
+	"ee": "Eesti",
 	"languagesDropdown.en": "English",
 	"languagesDropdown.ru": "Русский",
 	"languagesDropdown.ee": "Eesti",
