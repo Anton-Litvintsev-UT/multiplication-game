@@ -67,8 +67,8 @@ export const recordsTableColumns: {
 	},
 	{
 		title: "records.incorrect",
-		dataIndex: "incorect",
-		key: "incorect",
+		dataIndex: "incorrect",
+		key: "incorrect",
 	},
 	{
 		title: "records.points",

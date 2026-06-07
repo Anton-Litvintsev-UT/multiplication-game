@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import FooterNavigation from "../components/FooterNavigation";
 import { useTranslation } from "react-i18next";
 import { recordsTableColumns } from "../defaults/constants";
+import { formatRecords, type FormattedRecord } from "../utils/records";
 
 export default function RecordsPage() {
 	const { t } = useTranslation();
@@ -15,7 +16,7 @@ export default function RecordsPage() {
 		document.documentElement.style.colorScheme = currentTheme;
 	}, [currentTheme]);
 
-	const [dataSource, setDataSource] = useState([]);
+	const [dataSource, setDataSource] = useState<FormattedRecord[]>([]);
 	const [loading, setLoading] = useState(false);
 
 	// Fetch records from backend on component mount
@@ -27,17 +28,7 @@ export default function RecordsPage() {
 				if (!response.ok) throw new Error("Failed to fetch records");
 				const data = await response.json();
 
-				const formattedData = data.map((item: any, index: number) => ({
-					key: item.id.toString(),
-					rank: index + 1,
-					name: item.name,
-					difficulty: Number(item.game_score) / Number(item.correct_count),
-					correct: item.correct_count,
-					incorect: item.asked_count - item.correct_count,
-					points: item.game_score,
-				}));
-
-				setDataSource(formattedData);
+				setDataSource(formatRecords(data));
 			} catch (error) {
 				console.error("Error fetching records:", error);
 			} finally {

@@ -4,51 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { paths, type GameStats } from "../defaults/constants";
 import FooterNavigation from "../components/FooterNavigation";
 import { useTranslation } from "react-i18next";
+import {
+	generateAnswersArray,
+	generateRandomNaturalNumber,
+	getBackgroundColor,
+} from "../utils/game";
 
 type GamePageProps = {
 	setGameStats: (stats: GameStats) => void;
-};
-
-type Range = {
-	min?: number;
-	max: number;
-};
-
-const getBackgroundColor = (
-	showAnswers: boolean,
-	answer: number,
-	correct: number,
-	selected: number,
-) => {
-	if (!showAnswers) return;
-	if (answer == correct) return "green";
-	else if (answer == selected) return "red";
-};
-
-const generateRandomNaturalNumber = ({ min = 2, max }: Range): number => {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-const generateAnswersArray = (correctAnswer: number): number[] => {
-	const answers = new Set<number>();
-
-	// 1. Always add the correct answer
-	answers.add(correctAnswer);
-
-	// 2. Generate distractors until we have 4 total
-	while (answers.size < 4) {
-		// Create an offset between -10 and 10 (excluding 0)
-		const offset = Math.floor(Math.random() * 21) - 10;
-		const distractor = correctAnswer + offset;
-
-		// Ensure distractor is a natural number and not the correct answer
-		if (distractor > 0 && distractor !== correctAnswer) {
-			answers.add(distractor);
-		}
-	}
-
-	// 3. Convert to array and shuffle them
-	return Array.from(answers).sort(() => Math.random() - 0.5);
 };
 
 export default function GamePage({ setGameStats }: GamePageProps) {
