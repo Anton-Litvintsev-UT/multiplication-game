@@ -23,7 +23,7 @@ export default function RecordsPage() {
 		const fetchRecords = async () => {
 			setLoading(true);
 			try {
-				const response = await fetch("http://localhost:8000/scores");
+				const response = await fetch(`${import.meta.env.VITE_API_URL}/scores`);
 				if (!response.ok) throw new Error("Failed to fetch records");
 				const data = await response.json();
 

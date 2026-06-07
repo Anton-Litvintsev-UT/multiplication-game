@@ -30,7 +30,7 @@ export default function ResultPage({ gameStats }: Props) {
 		localStorage.setItem("player_name", playerName);
 
 		try {
-			const response = await fetch("http://localhost:8000/scores", {
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/scores`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
