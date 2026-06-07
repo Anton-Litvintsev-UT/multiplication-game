@@ -10,10 +10,10 @@ export default function NumberInputWithLabel({
 }: NumberInputWithLabelProps) {
 	return (
 		<div className="flex flex-col gap-1">
-			<Typography.Text className="text-sky-800 font-medium text-left">
+			<Typography.Text className="text-sky-800 dark:text-sky-300 font-medium text-left">
 				{label}
 			</Typography.Text>
-			<InputNumber {...props} />
+			<InputNumber className="w-full" {...props} />
 		</div>
 	);
 }

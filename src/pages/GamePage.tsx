@@ -181,33 +181,42 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 						: antTheme.defaultAlgorithm,
 			}}
 		>
-			<div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
-				<div className="flex flex-col items-center p-8 gap-6 bg-gray-400 dark:bg-slate-700 w-min rounded-lg shadow-xl">
-					<Button className="text-center" onClick={() => navigate(paths.INDEX)}>
+			<div className="flex flex-col items-center justify-center p-4 sm:p-8 pb-28 gap-6 min-h-dvh bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
+				<div className="flex flex-col items-center p-5 sm:p-8 gap-6 bg-gray-200 dark:bg-slate-700 w-full max-w-md rounded-xl shadow-xl">
+					<Button
+						block
+						className="text-center"
+						onClick={() => navigate(paths.INDEX)}
+					>
 						{t("gamepage.end_game")}
 					</Button>
 					<Progress
-						className="justify-center"
+						className="w-full"
 						percent={progressPercent}
-						size={[400, 20]}
 						showInfo={false}
 						success={{
 							percent: 0,
 						}}
 					/>
-					<div className="flex w-full flex-row justify-between">
+					<div className="flex w-full flex-row justify-between gap-4">
 						<div>
-							<h3 className="dark:text-gray-300">{t("gamepage.next_task")}</h3>
-							<h1 className="dark:text-white">
+							<h3 className="text-sm text-slate-700 dark:text-gray-300">
+								{t("gamepage.next_task")}
+							</h3>
+							<h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
 								{factor1}x{factor2}
 							</h1>
 						</div>
-						<div>
-							<h3 className="dark:text-gray-300">{t("gamepage.score")}</h3>
-							<h1 className="dark:text-white">{gameScore}</h1>
+						<div className="text-right">
+							<h3 className="text-sm text-slate-700 dark:text-gray-300">
+								{t("gamepage.score")}
+							</h3>
+							<h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+								{gameScore}
+							</h1>
 						</div>
 					</div>
-					<div className="grid grid-cols-2 gap-4 w-full">
+					<div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
 						{answersArray.map((answer, index) => {
 							const btnBackground = getBackgroundColor(
 								showAnswer,
@@ -222,7 +231,8 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 									style={{
 										height: "auto",
 										aspectRatio: "1 / 1",
-										fontSize: "4rem",
+										fontSize: "clamp(1.75rem, 12vw, 4rem)",
+										fontWeight: 600,
 										backgroundColor: `${btnBackground}`,
 									}}
 									onClick={() => onAnswerSelect(answer)}

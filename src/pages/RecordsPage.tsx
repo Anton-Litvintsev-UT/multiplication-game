@@ -60,12 +60,17 @@ export default function RecordsPage() {
 						: antTheme.defaultAlgorithm,
 			}}
 		>
-			<div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
-				<Table
-					dataSource={dataSource}
-					columns={recordsTableColumnsTranslated}
-					loading={loading}
-				/>
+			<div className="flex flex-col items-center p-4 sm:p-8 pb-28 gap-6 min-h-dvh bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
+				<div className="w-full max-w-3xl">
+					<Table
+						dataSource={dataSource}
+						columns={recordsTableColumnsTranslated}
+						loading={loading}
+						scroll={{ x: "max-content" }}
+						pagination={{ responsive: true, defaultPageSize: 10 }}
+						size="middle"
+					/>
+				</div>
 				<FooterNavigation />
 			</div>
 		</ConfigProvider>

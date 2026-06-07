@@ -69,9 +69,9 @@ export default function SettingsPage() {
 						: antTheme.defaultAlgorithm,
 			}}
 		>
-			<div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
+			<div className="flex flex-col items-center justify-center p-6 sm:p-8 pb-28 gap-8 min-h-dvh bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
 				<div className="text-center">
-					<h1 className="text-3xl font-bold text-sky-900 dark:text-sky-400">
+					<h1 className="text-3xl sm:text-4xl font-bold text-sky-900 dark:text-sky-400">
 						{t("general.game_name")}
 					</h1>
 				</div>

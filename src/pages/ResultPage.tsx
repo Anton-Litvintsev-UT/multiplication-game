@@ -66,8 +66,8 @@ export default function ResultPage({ gameStats }: Props) {
 						: antTheme.defaultAlgorithm,
 			}}
 		>
-			<div className="flex flex-col items-center p-8 gap-6 min-h-screen bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
-				<div className="flex flex-col items-center p-8 gap-6 bg-gray-400 dark:bg-slate-700 min-w-[300px] rounded-lg shadow-xl">
+			<div className="flex flex-col items-center justify-center p-4 sm:p-8 pb-28 gap-6 min-h-dvh bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 transition-colors">
+				<div className="flex flex-col items-center p-6 sm:p-8 gap-6 bg-gray-200 dark:bg-slate-700 w-full max-w-sm rounded-xl shadow-xl">
 					<Button
 						size="large"
 						className="text-center w-full"
