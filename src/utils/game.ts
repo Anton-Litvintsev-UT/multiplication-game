@@ -14,7 +14,10 @@ export const getBackgroundColor = (
 	else if (answer == selected) return "red";
 };
 
-export const generateRandomNaturalNumber = ({ min = 2, max }: Range): number => {
+export const generateRandomNaturalNumber = ({
+	min = 2,
+	max,
+}: Range): number => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 

@@ -109,10 +109,12 @@ export default function GamePage({ setGameStats }: GamePageProps) {
 	}, [gameScore, correctCount, askedCount]);
 
 	useEffect(() => {
+		if (showAnswer) return;
+
 		const answer = factor1 * factor2;
 		setCorrectAnswer(answer);
 		setAnswersArray(generateAnswersArray(answer));
-	}, [factor1, factor2]);
+	}, [askedCount, showAnswer, factor1, factor2]);
 
 	useEffect(() => {
 		if (!showAnswer) return;
